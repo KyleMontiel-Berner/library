@@ -1,4 +1,7 @@
-let header = document.querySelector(".header")
+let header = document.querySelector(".header");
+let display = document.createElement('div');
+header.appendChild(display);
+
 
 const library = [];
 
@@ -18,6 +21,9 @@ function addBookToLibrary(book) {
 }
 
 function displayBook() {
+    const allBooks = document.querySelectorAll('.book');
+    allBooks.forEach(book => display.removeChild(book));
+    
     for (let i = 0; i < library.length; i++) {
         const el = document.createElement('div');
         el.classList.add("book");
@@ -26,7 +32,14 @@ function displayBook() {
                         Pages: ${library[i].pages}\n
                         Read: ${library[i].read}\n
                         Unique Id: ${library[i].uniqueId}`
-        header.appendChild(el);
+        display.appendChild(el);
+
+
+        const readBtn = document.createElement('button');
+        readBtn.textContent = "Read Status";
+        readBtn.classList.add("read-toggle");
+        readBtn.setAttribute("data-id", library[i].uniqueId);
+        el.appendChild(readBtn);
 
         const deleteBookBtn = document.createElement('button');
         deleteBookBtn.textContent = "Delete Book";
@@ -39,25 +52,39 @@ function displayBook() {
             const bookIndex = library.findIndex(book => book.uniqueId === bookId);
             if (bookIndex !== -1) {
                 library.splice(bookIndex, 1);
-                header.removeChild(el);
-            }
+                display.removeChild(el);
+            };
         });
     };
-}
+};
 
-/*
-const theQuietAmerican = new Book('The Quiet American', 'Graham Greene', 240, 'read');
-const theWarofArt = new Book('The War of Art', 'Steven Pressfield', 165, 'read');
-addBookToLibrary(theQuietAmerican);
-addBookToLibrary(theWarofArt);
-displayBook();
-*/
+Book.prototype.toggleRead = function() {
+    if (this.read === 'Read') {
+        this.read = 'Not Read';
+}
+ else {
+    this.read = 'Read';
+}
+};
+
+display.addEventListener('click', (e) => {
+    if (e.target.matches('.read-toggle')) {
+        const bookId = e.target.getAttribute('data-id');
+        const book = library.find(book => book.uniqueId === bookId);
+        if (book) {
+            book.toggleRead();
+            displayBook();
+        }
+    }
+});
+
+
 
 /* Add New Book Button and Open Modal Functionality */
 
 const newBookButton = document.createElement('button');
 newBookButton.textContent = "Add New Book";
-header.appendChild(newBookButton);
+display.appendChild(newBookButton);
 
 newBookButton.addEventListener('click', () => {
     dialog.showModal();
@@ -76,14 +103,15 @@ const closeBtn = document.querySelector('.close-btn');
 
 addBookBtn.addEventListener('click', (e) => {
     e.preventDefault();
-const bookTitle = titleInput.value;
-const bookAuthor = authorInput.value;
-const bookPages = pagesInput.value;
-const bookRead = readInput.value;
-const newBook = new Book(bookTitle, bookAuthor, bookPages, bookRead)
-addBookToLibrary(newBook);
-displayBook();
-form.reset();
+    const bookTitle = titleInput.value;
+    const bookAuthor = authorInput.value;
+    const bookPages = pagesInput.value;
+    const bookRead = readInput.checked ? 'Read' : 'Not Read';
+    const newBook = new Book(bookTitle, bookAuthor, bookPages, bookRead)
+    addBookToLibrary(newBook);
+    displayBook();
+    form.reset();
+    dialog.close();
 });
 
 closeBtn.addEventListener('click', () => {
