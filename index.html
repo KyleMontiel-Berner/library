@@ -4,13 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Web Project</title>
     <script src="script.js" defer></script>
     <link rel="stylesheet" href="style.css"> 
+    <title>My Web Project</title>
 </head>
 <body>
     <h1 class="header">Welcome!</h1>
-
+    <dialog id="dialog">
+        <form method="dialog">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+            <br>
+            <label for="author">Author:</label>
+            <input type="text" id="author" name="author" required>
+            <br>
+            <label for="pages">Pages:</label>
+            <input type="number" id="pages" name="pages" required>
+            <br>
+            <label for="read">Read:</label>
+            <input type="checkbox" id="read" name="read">
+            <br>
+            <button type="submit" class="add-book">Add Book</button>
+            <button type="button" class="close-btn">Close</button>
+        </form>
+    </dialog>
     
 </body>
 </html>
