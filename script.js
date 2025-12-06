@@ -5,16 +5,28 @@ header.appendChild(display);
 
 const library = [];
 
-function Book(title, author, pages, read, uniqueId) {
+class Book {
+    constructor(title, author, pages, read) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.read = read;
     this.uniqueId = crypto.randomUUID()
-    this.info = function() {
-        return `${title} by ${author}, ${pages} pages, ${read}, ${uniqueId}`
     }
+    info() {
+        return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}, ${this.uniqueId}`
+    }
+
+    toggleRead() {
+        if (this.read === 'Read') {
+        this.read = 'Not Read';
+        } else {
+        this.read = 'Read';
+        }
     };
+
+
+}
 
 function addBookToLibrary(book) {
     library.push(book);
@@ -58,14 +70,7 @@ function displayBook() {
     };
 };
 
-Book.prototype.toggleRead = function() {
-    if (this.read === 'Read') {
-        this.read = 'Not Read';
-}
- else {
-    this.read = 'Read';
-}
-};
+
 
 display.addEventListener('click', (e) => {
     if (e.target.matches('.read-toggle')) {
